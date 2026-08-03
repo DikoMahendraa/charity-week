@@ -8,7 +8,6 @@ import {
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
-import { RoleSwitcher } from "./role-switcher";
 
 const navSections = [
   {
@@ -98,8 +97,6 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Dev role-switcher — remove before going to production */}
-      <RoleSwitcher />
     </aside>
   );
 }
