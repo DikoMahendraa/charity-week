@@ -40,6 +40,8 @@ const badgeVariants = cva(
           "bg-[#FFFBEB] text-[#D97706]",
         renewal:
           "bg-[#EFF6FF] text-[#1D4ED8]",
+        flagged:
+          "bg-[#FFE4E6] text-[#E11D48]",
       },
     },
     defaultVariants: {
