@@ -27,6 +27,19 @@ const badgeVariants = cva(
           "bg-red-50 text-red-600",
         funded:
           "bg-[#DBE9FF] text-[#003080]",
+        // Payment statuses
+        completed:
+          "bg-[#ECFDF3] text-[#037847]",
+        failed:
+          "bg-red-50 text-red-600",
+        refunded:
+          "bg-red-50 text-red-500",
+        abandoned:
+          "bg-orange-50 text-orange-600",
+        pending:
+          "bg-[#FFFBEB] text-[#D97706]",
+        renewal:
+          "bg-[#EFF6FF] text-[#1D4ED8]",
       },
     },
     defaultVariants: {
