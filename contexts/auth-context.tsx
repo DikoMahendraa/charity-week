@@ -16,6 +16,8 @@ interface AuthContextValue {
   can: (pathname: string) => boolean;
   /** Dev-only: switch the active mock role. Remove once real auth is wired. */
   switchRole: (role: Role) => void;
+  /** Clear session and user state. */
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -44,13 +46,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(MOCK_USERS[role]);
   }, []);
 
+  const logout = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY);
+    // Also clear the persisted Zustand auth store (token etc.)
+    localStorage.removeItem("iruk-auth");
+    setUser(null);
+  }, []);
+
   const can = useCallback(
     (pathname: string) => (user ? canAccess(pathname, user.role) : false),
     [user]
   );
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, can, switchRole }}>
+    <AuthContext.Provider value={{ user, isLoading, can, switchRole, logout }}>
       {children}
     </AuthContext.Provider>
   );

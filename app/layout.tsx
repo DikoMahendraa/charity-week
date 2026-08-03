@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryProvider } from "@/providers/query-provider";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,9 @@ export default function RootLayout({
     >
       <body className="h-full">
         <QueryProvider>
-          <TooltipProvider delay={300}>{children}</TooltipProvider>
+          <AuthProvider>
+            <TooltipProvider delay={300}>{children}</TooltipProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

@@ -14,11 +14,11 @@ export function DashboardGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isLoading) return;
-    if (!user) { router.replace("/unauthorized"); return; }
+    if (!user) { router.replace("/login"); return; }
     if (!can(pathname)) {
       // Send the user to their default allowed route instead of a dead end
       const fallback = defaultRouteForRole(user.role);
-      router.replace(pathname === fallback ? "/unauthorized" : fallback);
+      router.replace(pathname === fallback ? "/login" : fallback);
     }
   }, [isLoading, user, pathname, can, router]);
 

@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutGrid, Zap, FileText, Users, CreditCard, Globe, UserCog,
+  LayoutGrid, Zap, FileText, Users, CreditCard, Globe, UserCog, LogOut,
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
+import { ROLE_LABELS } from "@/lib/auth";
 
 const navSections = [
   {
@@ -41,7 +42,13 @@ const navSections = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { can } = useAuth();
+  const router   = useRouter();
+  const { user, can, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
 
   // Filter each section's items to only those the current user may access
   const visibleSections = navSections
@@ -97,6 +104,30 @@ export function Sidebar() {
         ))}
       </nav>
 
+      {/* User + Logout */}
+      {user && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          {/* User info */}
+          <div className="flex items-center gap-2.5 px-2 mb-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FFF2DF] text-xs font-bold text-[#EC8900]">
+              {user.avatarInitials}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-xs font-semibold text-[#3C3C3B]">{user.name}</p>
+              <p className="truncate text-[10px] text-[#A1A1A1]">{ROLE_LABELS[user.role]}</p>
+            </div>
+          </div>
+
+          {/* Logout button */}
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold text-[#A1A1A1] transition-colors hover:bg-red-50 hover:text-red-500"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            Log Out
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
