@@ -13,7 +13,7 @@ import {
   ChevronDown, ChevronRight,
   LayoutTemplate, Columns2, Zap,
   Heart, BookOpen, HelpCircle, Type,
-  Images, Video, Eye, Save, Navigation, PanelBottom,
+  Images, Video, Eye, Save, Navigation, PanelBottom, Maximize2, Minimize2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { puckConfig, EMPTY_DATA } from "@/lib/cms/config";
@@ -195,6 +195,7 @@ export default function CmsPage() {
   const [pages, setPages]       = useState<CmsPageEntry[]>(INITIAL_PAGES);
   const [activeId, setActiveId] = useState("home");
   const [saved, setSaved]       = useState(false);
+  const [fullWidth, setFullWidth] = useState(false);
 
   // Load drafts from localStorage after mount
   useEffect(() => {
@@ -244,10 +245,10 @@ export default function CmsPage() {
         headerPath={activePage.slug}
         iframe={{ enabled: false }}
         overrides={{
-          header: ({ actions }) => (
+          header: () => (
             <div className="flex h-14 items-center justify-between border-b border-gray-100 bg-white px-6">
               {/* Left — back button + brand + page tabs */}
-              <div className="flex items-center gap-5">
+              <div className="flex items-center gap-5 min-w-0">
                 <button
                   onClick={() => router.push("/campaign/institutions")}
                   className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[#A1A1A1] transition-colors hover:bg-gray-100 hover:text-[#3C3C3B]"
@@ -281,7 +282,33 @@ export default function CmsPage() {
                 </div>
               </div>
 
-              {/* Right — Save + Preview + Puck publish/undo actions */}
+              {/* Center — canvas width toggle */}
+              <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-1 shrink-0">
+                <button
+                  onClick={() => setFullWidth(false)}
+                  title="Container width (max 1280px)"
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
+                    !fullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
+                  )}
+                >
+                  <Minimize2 className="h-3 w-3" />
+                  Container
+                </button>
+                <button
+                  onClick={() => setFullWidth(true)}
+                  title="Full screen width"
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
+                    fullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
+                  )}
+                >
+                  <Maximize2 className="h-3 w-3" />
+                  Full Width
+                </button>
+              </div>
+
+              {/* Right — Save + Preview */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleSave}
@@ -302,11 +329,23 @@ export default function CmsPage() {
                   <Eye className="h-3.5 w-3.5" />
                   Preview
                 </button>
-                {actions}
               </div>
             </div>
           ),
           drawer: () => <CustomDrawer />,
+          preview: ({ children }) => (
+            <div
+              style={{
+                maxWidth:   fullWidth ? "none" : "1280px",
+                marginLeft:  "auto",
+                marginRight: "auto",
+                width:       "100%",
+                transition:  "max-width 0.3s ease",
+              }}
+            >
+              {children}
+            </div>
+          ),
         }}
       />
     </div>

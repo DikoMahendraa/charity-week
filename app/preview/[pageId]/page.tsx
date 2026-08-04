@@ -86,7 +86,9 @@ export default function PreviewPage() {
           </button>
         </div>
       ) : (
-        <Render config={puckConfig} data={data} />
+        <div style={{ maxWidth: "1280px", marginLeft: "auto", marginRight: "auto", width: "100%" }}>
+          <Render config={puckConfig} data={data} />
+        </div>
       )}
     </div>
   );
