@@ -193,6 +193,178 @@ export const puckConfig: Config = {
       ),
     },
 
+    Navbar: {
+      label: "Navbar",
+      fields: {
+        logo:      { type: "text", label: "Logo Text"      },
+        logoImage: { type: "text", label: "Logo Image URL" },
+        navLinks: {
+          type: "array", label: "Nav Links",
+          arrayFields: {
+            label: { type: "text", label: "Label" },
+            href:  { type: "text", label: "URL"   },
+          },
+          defaultItemProps: { label: "Link", href: "/" },
+        },
+        ctaLabel:   { type: "text",  label: "CTA Button Text" },
+        ctaHref:    { type: "text",  label: "CTA Button Link" },
+        background: {
+          type: "radio", label: "Background",
+          options: [
+            { value: "white",       label: "White"       },
+            { value: "dark",        label: "Dark"        },
+            { value: "transparent", label: "Transparent" },
+          ],
+        },
+      },
+      defaultProps: {
+        logo:      "IRUK",
+        logoImage: "",
+        navLinks: [
+          { label: "Home",    href: "/"        },
+          { label: "About",   href: "/about"   },
+          { label: "Donate",  href: "/donate"  },
+          { label: "Contact", href: "/contact" },
+        ],
+        ctaLabel:   "Donate Now",
+        ctaHref:    "/donate",
+        background: "white",
+      },
+      render: ({ logo, logoImage, navLinks, ctaLabel, ctaHref, background }) => {
+        const isDark  = background === "dark";
+        const bg      = isDark ? "#1C1C1C" : background === "transparent" ? "transparent" : "#fff";
+        const border  = isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #F1F1F1";
+        const linkClr = isDark ? "rgba(255,255,255,0.75)" : "#475467";
+        return (
+          <nav style={{ background: bg, borderBottom: border, padding: "0 40px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px", position: "sticky", top: 0, zIndex: 100 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+              {logoImage
+                ? <img src={logoImage} alt={logo} style={{ height: "36px", objectFit: "contain", display: "block" }} />
+                : <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#EC8900" }}>{logo}</span>
+              }
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              {(navLinks as { label: string; href: string }[] || []).map((link, i) => (
+                <a key={i} href={link.href} style={{ fontSize: "0.875rem", fontWeight: 500, color: linkClr, textDecoration: "none", padding: "6px 12px", borderRadius: "6px" }}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            {ctaLabel && (
+              <a href={ctaHref} style={{ display: "inline-block", background: "#EC8900", color: "#fff", padding: "10px 24px", borderRadius: "8px", fontWeight: 700, textDecoration: "none", fontSize: "0.875rem", flexShrink: 0 }}>
+                {ctaLabel}
+              </a>
+            )}
+          </nav>
+        );
+      },
+    },
+
+    Footer: {
+      label: "Footer",
+      fields: {
+        orgName:     { type: "text",     label: "Organization Name" },
+        description: { type: "textarea", label: "Description"       },
+        col1Title: { type: "text", label: "Column 1 Title" },
+        col1Links: {
+          type: "array", label: "Column 1 Links",
+          arrayFields: {
+            label: { type: "text", label: "Label" },
+            href:  { type: "text", label: "URL"   },
+          },
+          defaultItemProps: { label: "Link", href: "/" },
+        },
+        col2Title: { type: "text", label: "Column 2 Title" },
+        col2Links: {
+          type: "array", label: "Column 2 Links",
+          arrayFields: {
+            label: { type: "text", label: "Label" },
+            href:  { type: "text", label: "URL"   },
+          },
+          defaultItemProps: { label: "Link", href: "/" },
+        },
+        socialFacebook:  { type: "text", label: "Facebook URL"  },
+        socialInstagram: { type: "text", label: "Instagram URL" },
+        socialTwitter:   { type: "text", label: "X / Twitter URL" },
+        copyright:  { type: "text", label: "Copyright Text" },
+        background: {
+          type: "radio", label: "Background",
+          options: [
+            { value: "dark",  label: "Dark"  },
+            { value: "light", label: "Light" },
+          ],
+        },
+      },
+      defaultProps: {
+        orgName:     "IRUK Charity Week",
+        description: "Transforming lives through the power of community fundraising since 2003.",
+        col1Title: "Organisation",
+        col1Links: [
+          { label: "About Us",     href: "/about"         },
+          { label: "Our Impact",   href: "/impact"        },
+          { label: "How It Works", href: "/how-it-works"  },
+        ],
+        col2Title: "Get Involved",
+        col2Links: [
+          { label: "Donate",     href: "/donate"    },
+          { label: "Fundraise",  href: "/fundraise" },
+          { label: "Contact Us", href: "/contact"   },
+        ],
+        socialFacebook:  "",
+        socialInstagram: "",
+        socialTwitter:   "",
+        copyright:  "© 2024 Islamic Relief UK. All rights reserved.",
+        background: "dark",
+      },
+      render: ({ orgName, description, col1Title, col1Links, col2Title, col2Links, socialFacebook, socialInstagram, socialTwitter, copyright, background }) => {
+        const isDark  = background !== "light";
+        const bg      = isDark ? "#1C1C1C" : "#F7F9FB";
+        const text    = isDark ? "#fff"    : "#161616";
+        const sub     = isDark ? "rgba(255,255,255,0.5)"  : "#6B7280";
+        const linkClr = isDark ? "rgba(255,255,255,0.7)"  : "#475467";
+        const divider = isDark ? "rgba(255,255,255,0.08)" : "#E5E7EB";
+        const socials  = [
+          { href: socialFacebook,  char: "f"  },
+          { href: socialInstagram, char: "ig" },
+          { href: socialTwitter,   char: "x"  },
+        ].filter(s => s.href);
+        return (
+          <footer style={{ background: bg, color: text, padding: "56px 40px 0" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "48px", paddingBottom: "48px", borderBottom: `1px solid ${divider}` }}>
+              {/* Brand */}
+              <div>
+                <div style={{ fontSize: "1.25rem", fontWeight: 800, color: "#EC8900", marginBottom: "12px" }}>{orgName}</div>
+                <p style={{ fontSize: "0.875rem", color: sub, lineHeight: 1.8, maxWidth: "320px" }}>{description}</p>
+                {socials.length > 0 && (
+                  <div style={{ display: "flex", gap: "8px", marginTop: "20px" }}>
+                    {socials.map((s, i) => (
+                      <a key={i} href={s.href} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "34px", height: "34px", borderRadius: "8px", background: isDark ? "rgba(255,255,255,0.08)" : "#E5E7EB", color: text, textDecoration: "none", fontSize: "0.7rem", fontWeight: 700 }}>
+                        {s.char}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Link columns */}
+              {([{ title: col1Title, links: col1Links }, { title: col2Title, links: col2Links }] as { title: string; links: { label: string; href: string }[] }[]).map(({ title, links }, i) => (
+                <div key={i}>
+                  <p style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase" as CSSProperties["textTransform"], letterSpacing: "0.08em", color: sub, marginBottom: "16px" }}>{title}</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {(links || []).map((link, j) => (
+                      <a key={j} href={link.href} style={{ fontSize: "0.875rem", color: linkClr, textDecoration: "none" }}>{link.label}</a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: "16px 0", textAlign: "center" as CSSProperties["textAlign"] }}>
+              <p style={{ fontSize: "0.75rem", color: sub }}>{copyright}</p>
+            </div>
+          </footer>
+        );
+      },
+    },
+
     // ── CONTENT ─────────────────────────────────────────────────────────────────
 
     DonationWidget: {

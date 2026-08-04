@@ -13,7 +13,7 @@ import {
   ChevronDown, ChevronRight,
   LayoutTemplate, Columns2, Zap,
   Heart, BookOpen, HelpCircle, Type,
-  Images, Video, Eye, Save,
+  Images, Video, Eye, Save, Navigation, PanelBottom,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { puckConfig, EMPTY_DATA } from "@/lib/cms/config";
@@ -48,6 +48,8 @@ type ComponentDef = {
 
 const COMPONENT_DEFS: ComponentDef[] = [
   // LAYOUT
+  { name: "Navbar",         label: "Navbar",           category: "LAYOUT",  icon: Navigation     },
+  { name: "Footer",         label: "Footer",           category: "LAYOUT",  icon: PanelBottom    },
   { name: "HeroBanner",     label: "Hero Banner",      category: "LAYOUT",  icon: LayoutTemplate },
   { name: "CTASection",     label: "CTA Section",      category: "LAYOUT",  icon: Zap            },
   { name: "TwoColumnCards", label: "Two-Column Cards",  category: "LAYOUT",  icon: Columns2       },
