@@ -44,17 +44,17 @@ interface Campaign {
 // raised/goal drive the progress bar automatically.
 // Replace with API data when ready — rank auto-updates after each drag.
 const initialCampaigns: Campaign[] = [
-  { id: "1",  rank: 1,  title: "Muslim Charity Run 2025", raised: 42500, goal: 50000, raisedFormatted: "$42,500", enabled: true  },
-  { id: "2",  rank: 2,  title: "Muslim Charity Run 2026", raised: 12092, goal: 50000, raisedFormatted: "$12,092", enabled: false },
-  { id: "3",  rank: 3,  title: "Muslim Charity Run 2026", raised: 31750, goal: 50000, raisedFormatted: "$31,750", enabled: true  },
-  { id: "4",  rank: 4,  title: "Muslim Charity Run 2026", raised:  8400, goal: 50000, raisedFormatted: "$8,400",  enabled: false },
-  { id: "5",  rank: 5,  title: "Muslim Charity Run 2026", raised: 49200, goal: 50000, raisedFormatted: "$49,200", enabled: true  },
-  { id: "6",  rank: 6,  title: "Muslim Charity Run 2026", raised:  5000, goal: 50000, raisedFormatted: "$5,000",  enabled: false },
-  { id: "7",  rank: 7,  title: "Muslim Charity Run 2026", raised: 19800, goal: 50000, raisedFormatted: "$19,800", enabled: false },
-  { id: "8",  rank: 8,  title: "Muslim Charity Run 2026", raised: 37600, goal: 50000, raisedFormatted: "$37,600", enabled: true  },
-  { id: "9",  rank: 9,  title: "Muslim Charity Run 2026", raised:  2100, goal: 50000, raisedFormatted: "$2,100",  enabled: false },
-  { id: "10", rank: 10, title: "Muslim Charity Run 2026", raised: 25300, goal: 50000, raisedFormatted: "$25,300", enabled: true  },
-  { id: "11", rank: 11, title: "Muslim Charity Run 2026", raised: 50000, goal: 50000, raisedFormatted: "$50,000", enabled: true  },
+  { id: "1", rank: 1, title: "Muslim Charity Run 2025", raised: 42500, goal: 50000, raisedFormatted: "$42,500", enabled: true },
+  { id: "2", rank: 2, title: "Muslim Charity Run 2026", raised: 12092, goal: 50000, raisedFormatted: "$12,092", enabled: false },
+  { id: "3", rank: 3, title: "Muslim Charity Run 2026", raised: 31750, goal: 50000, raisedFormatted: "$31,750", enabled: true },
+  { id: "4", rank: 4, title: "Muslim Charity Run 2026", raised: 8400, goal: 50000, raisedFormatted: "$8,400", enabled: false },
+  { id: "5", rank: 5, title: "Muslim Charity Run 2026", raised: 49200, goal: 50000, raisedFormatted: "$49,200", enabled: true },
+  { id: "6", rank: 6, title: "Muslim Charity Run 2026", raised: 5000, goal: 50000, raisedFormatted: "$5,000", enabled: false },
+  { id: "7", rank: 7, title: "Muslim Charity Run 2026", raised: 19800, goal: 50000, raisedFormatted: "$19,800", enabled: false },
+  { id: "8", rank: 8, title: "Muslim Charity Run 2026", raised: 37600, goal: 50000, raisedFormatted: "$37,600", enabled: true },
+  { id: "9", rank: 9, title: "Muslim Charity Run 2026", raised: 2100, goal: 50000, raisedFormatted: "$2,100", enabled: false },
+  { id: "10", rank: 10, title: "Muslim Charity Run 2026", raised: 25300, goal: 50000, raisedFormatted: "$25,300", enabled: true },
+  { id: "11", rank: 11, title: "Muslim Charity Run 2026", raised: 50000, goal: 50000, raisedFormatted: "$50,000", enabled: true },
 ];
 
 // ─── Toggle ──────────────────────────────────────────────────────────────────
@@ -182,12 +182,12 @@ function CampaignRow({ campaign: c, isDragging = false, onToggle }: RowProps) {
       <TableCell>
         <div className="flex items-center gap-1.5">
           <Button variant="outline" size="sm"
-            className="rounded-full px-4 text-xs border-gray-300 text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
+            className="rounded-full px-4 text-xs border-[#EC8900] text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
           >
             View
           </Button>
           <Button variant="outline" size="sm"
-            className="rounded-full px-4 text-xs border-gray-300 text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
+            className="rounded-full px-4 text-xs border-[#EC8900] text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
           >
             Edit
           </Button>
@@ -196,7 +196,7 @@ function CampaignRow({ campaign: c, isDragging = false, onToggle }: RowProps) {
 
       {/* Archive */}
       <TableCell>
-        <button className="p-1.5 rounded-md text-gray-300 hover:text-[#EC8900] hover:bg-orange-50 transition-colors">
+        <button className="p-1.5 rounded-md text-[#EC8900] hover:text-[#EC8900] hover:bg-orange-50 transition-colors">
           <Archive className="h-4 w-4" />
         </button>
       </TableCell>
@@ -213,7 +213,7 @@ function DragGhostRow({ campaign: c }: { campaign: Campaign }) {
       </TableCell>
       <TableCell className="text-sm font-medium text-gray-600">{c.rank}</TableCell>
       <TableCell>
-        <Toggle enabled={c.enabled} onChange={() => {}} />
+        <Toggle enabled={c.enabled} onChange={() => { }} />
       </TableCell>
       <TableCell className="text-sm font-medium text-gray-700">{c.title}</TableCell>
       <TableCell>
