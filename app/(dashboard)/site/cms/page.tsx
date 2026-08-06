@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Puck, Drawer, usePuck,
   type Data,
@@ -14,12 +14,14 @@ import {
   LayoutTemplate, Columns2, Zap,
   Heart, BookOpen, HelpCircle, Type,
   Images, Video, Eye, Save, Navigation, PanelBottom, Maximize2, Minimize2,
+  BarChart2, PanelLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { puckConfig, EMPTY_DATA } from "@/lib/cms/config";
-import { loadDraft, saveDraft, savePublished } from "@/lib/cms/storage";
+import { loadDraft, savePublished } from "@/lib/cms/storage";
 
-// ─── Orange theme — overrides Puck's azure scale ─────────────────────────────
+// ─── Orange theme vars ────────────────────────────────────────────────────────
+
 const PUCK_ORANGE_VARS: React.CSSProperties = {
   "--puck-color-azure-01": "#5C3300",
   "--puck-color-azure-02": "#8A4D00",
@@ -33,39 +35,49 @@ const PUCK_ORANGE_VARS: React.CSSProperties = {
   "--puck-color-azure-10": "#FEF4E0",
   "--puck-color-azure-11": "#FEF8EF",
   "--puck-color-azure-12": "#FFFDF8",
-  "--puck-radius-m":       "6px",
-  "--puck-radius-l":       "10px",
+  "--puck-radius-m": "6px",
+  "--puck-radius-l": "10px",
 } as React.CSSProperties;
 
-// ─── Component definitions ───────────────────────────────────────────────────
+// ─── Component definitions ────────────────────────────────────────────────────
 
 type ComponentDef = {
-  name:     string;
-  label:    string;
+  name: string;
+  label: string;
   category: "LAYOUT" | "CONTENT" | "MEDIA";
-  icon:     React.ElementType;
+  icon: React.ElementType;
 };
 
 const COMPONENT_DEFS: ComponentDef[] = [
   // LAYOUT
-  { name: "Navbar",         label: "Navbar",           category: "LAYOUT",  icon: Navigation     },
-  { name: "Footer",         label: "Footer",           category: "LAYOUT",  icon: PanelBottom    },
-  { name: "HeroBanner",     label: "Hero Banner",      category: "LAYOUT",  icon: LayoutTemplate },
-  { name: "CTASection",     label: "CTA Section",      category: "LAYOUT",  icon: Zap            },
-  { name: "TwoColumnCards", label: "Two-Column Cards",  category: "LAYOUT",  icon: Columns2       },
+  { name: "Navbar", label: "Navbar", category: "LAYOUT", icon: Navigation },
+  { name: "Footer", label: "Footer (Full)", category: "LAYOUT", icon: PanelBottom },
+  { name: "SimpleFooter", label: "Footer (Simple)", category: "LAYOUT", icon: PanelBottom },
+  { name: "HeroBanner", label: "Hero Banner", category: "LAYOUT", icon: LayoutTemplate },
+  { name: "StatsBar", label: "Stats Bar", category: "LAYOUT", icon: BarChart2 },
+  { name: "ImageTextSection", label: "Image + Text", category: "LAYOUT", icon: PanelLeft },
+  { name: "CTASection", label: "CTA Section", category: "LAYOUT", icon: Zap },
+  { name: "TwoColumnCards", label: "Two-Column Cards", category: "LAYOUT", icon: Columns2 },
+  { name: "TwoPanelRichText", label: "Two-Panel Rich Text", category: "LAYOUT", icon: Columns2 },
   // CONTENT
-  { name: "DonationWidget", label: "Donation Widget",  category: "CONTENT", icon: Heart          },
-  { name: "ImpactStories",  label: "Impact Stories",   category: "CONTENT", icon: BookOpen       },
-  { name: "FAQSection",     label: "FAQ Section",      category: "CONTENT", icon: HelpCircle     },
-  { name: "RichTextBlock",  label: "Rich Text Block",  category: "CONTENT", icon: Type           },
+  { name: "DonationWidget", label: "Donation Widget", category: "CONTENT", icon: Heart },
+  { name: "ImpactStories", label: "Impact Stories", category: "CONTENT", icon: BookOpen },
+  { name: "FAQSection", label: "FAQ Section", category: "CONTENT", icon: HelpCircle },
+  { name: "RichTextBlock", label: "Rich Text Block", category: "CONTENT", icon: Type },
   // MEDIA
-  { name: "ImageGallery",   label: "Image Gallery",    category: "MEDIA",   icon: Images         },
-  { name: "VideoEmbed",     label: "Video Embed",      category: "MEDIA",   icon: Video          },
+  { name: "ImageGallery", label: "Image Gallery", category: "MEDIA", icon: Images },
+  { name: "VideoEmbed", label: "Video Embed", category: "MEDIA", icon: Video },
 ];
 
 const CATEGORIES: Array<ComponentDef["category"]> = ["LAYOUT", "CONTENT", "MEDIA"];
 
-// ─── Custom drawer item (uses Puck context for click-to-insert) ───────────────
+const SLUG_MAP: Record<string, string> = {
+  home: "/microsite",
+  about: "/microsite/about",
+  faq: "/microsite/faq",
+};
+
+// ─── Custom drawer ────────────────────────────────────────────────────────────
 
 const ROOT_ZONE = "root:default-zone";
 
@@ -76,10 +88,10 @@ function DrawerComponentItem({ comp, index }: { comp: ComponentDef; index: numbe
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
     dispatch({
-      type:             "insert",
-      componentType:    comp.name,
+      type: "insert",
+      componentType: comp.name,
       destinationIndex: appState.data.content.length,
-      destinationZone:  ROOT_ZONE,
+      destinationZone: ROOT_ZONE,
     } as Parameters<typeof dispatch>[0]);
   };
 
@@ -105,10 +117,8 @@ function DrawerComponentItem({ comp, index }: { comp: ComponentDef; index: numbe
   );
 }
 
-// ─── Custom drawer panel ──────────────────────────────────────────────────────
-
 function CustomDrawer() {
-  const [search, setSearch]       = useState("");
+  const [search, setSearch] = useState("");
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   const filtered = COMPONENT_DEFS.filter((c) =>
@@ -123,7 +133,6 @@ function CustomDrawer() {
       <div className="px-4 pb-3 pt-4">
         <p className="text-xs font-bold uppercase tracking-wider text-[#A1A1A1]">Components</p>
       </div>
-
       <div className="px-3 pb-3">
         <div className="relative">
           <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
@@ -135,28 +144,23 @@ function CustomDrawer() {
           />
         </div>
       </div>
-
       <div className="flex-1 overflow-y-auto px-2 pb-4">
         {CATEGORIES.map((cat) => {
           const items = filtered.filter((c) => c.category === cat);
           if (items.length === 0) return null;
           const isOpen = !collapsed[cat];
-
           return (
             <div key={cat} className="mb-3">
               <button
                 onClick={() => toggleCategory(cat)}
                 className="flex w-full items-center justify-between px-1 py-1 mb-1"
               >
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#A1A1A1]">
-                  {cat}
-                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#A1A1A1]">{cat}</span>
                 {isOpen
                   ? <ChevronDown className="h-3 w-3 text-gray-400" />
                   : <ChevronRight className="h-3 w-3 text-gray-400" />
                 }
               </button>
-
               {isOpen && (
                 <Drawer droppableId={cat}>
                   {items.map((comp) => {
@@ -173,31 +177,165 @@ function CustomDrawer() {
   );
 }
 
-// ─── CMS page list ────────────────────────────────────────────────────────────
+// ─── Custom header ────────────────────────────────────────────────────────────
+// Must be a named component (not inline JSX) so it can call usePuck()
+
+interface CmsHeaderProps {
+  pages: CmsPageEntry[];
+  activeId: string;
+  setActiveId: (id: string) => void;
+  handleSave: () => void;
+  saved: boolean;
+  router: ReturnType<typeof useRouter>;
+}
+
+function CmsHeader({ pages, activeId, setActiveId, handleSave, saved, router }: CmsHeaderProps) {
+  const { dispatch, appState } = usePuck();
+  const initialized = useRef(false);
+
+  // Default to Container (1280px) on first mount of each page
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+    dispatch({
+      type: "setUi",
+      ui: {
+        viewports: {
+          ...appState.ui.viewports,
+          current: { width: 1280, height: "auto" },
+        },
+      },
+    } as Parameters<typeof dispatch>[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const currentWidth = appState.ui.viewports?.current?.width;
+  const isFullWidth = currentWidth === "100%" || currentWidth === undefined;
+
+  const setViewport = (width: number | "100%") => {
+    dispatch({
+      type: "setUi",
+      ui: {
+        viewports: {
+          ...appState.ui.viewports,
+          current: { width, height: "auto" },
+        },
+      },
+    } as Parameters<typeof dispatch>[0]);
+  };
+
+  return (
+    <div className="flex h-14 items-center justify-between border-b border-gray-100 bg-white px-6">
+      {/* Left  back + brand + page tabs */}
+      <div className="flex items-center gap-5 min-w-0">
+        <button
+          onClick={() => router.push("/campaign/institutions")}
+          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[#A1A1A1] transition-colors hover:bg-gray-100 hover:text-[#3C3C3B]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Dashboard
+        </button>
+
+        <div className="h-4 w-px bg-gray-200" />
+
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4 text-[#EC8900]" />
+          <span className="text-sm font-bold text-[#161616]">Site CMS</span>
+        </div>
+
+        <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-1">
+          {pages.map((page) => (
+            <button
+              key={page.id}
+              onClick={() => setActiveId(page.id)}
+              className={cn(
+                "rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                activeId === page.id
+                  ? "bg-white text-[#EC8900] shadow-sm"
+                  : "text-[#A1A1A1] hover:text-gray-600"
+              )}
+            >
+              {page.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Center  Container / Full Width toggle */}
+      <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-1 shrink-0">
+        <button
+          onClick={() => setViewport(1280)}
+          title="Container width (1280px, centred)"
+          className={cn(
+            "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
+            !isFullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
+          )}
+        >
+          <Minimize2 className="h-3 w-3" />
+          Container
+        </button>
+        <button
+          onClick={() => setViewport("100%")}
+          title="Full canvas width"
+          className={cn(
+            "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
+            isFullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
+          )}
+        >
+          <Maximize2 className="h-3 w-3" />
+          Full Width
+        </button>
+      </div>
+
+      {/* Right  Save + View Live */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleSave}
+          className={cn(
+            "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
+            saved
+              ? "bg-green-50 border border-green-200 text-green-700"
+              : "bg-[#EC8900] text-white hover:bg-[#D97B00]"
+          )}
+        >
+          <Save className="h-3.5 w-3.5" />
+          {saved ? "Saved!" : "Save Changes"}
+        </button>
+        <button
+          onClick={() => window.open(SLUG_MAP[activeId] ?? "/microsite", "_blank")}
+          className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:border-gray-300"
+        >
+          <Eye className="h-3.5 w-3.5" />
+          View Live
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Page list ────────────────────────────────────────────────────────────────
 
 interface CmsPageEntry {
-  id:    string;
+  id: string;
   label: string;
-  slug:  string;
-  data:  Data;
+  slug: string;
+  data: Data;
 }
 
 const INITIAL_PAGES: CmsPageEntry[] = [
-  { id: "home",  label: "Home",     slug: "/",      data: EMPTY_DATA },
+  { id: "home", label: "Home", slug: "/", data: EMPTY_DATA },
   { id: "about", label: "About Us", slug: "/about", data: EMPTY_DATA },
-  { id: "faq",   label: "FAQ",      slug: "/faq",   data: EMPTY_DATA },
+  { id: "faq", label: "FAQ", slug: "/faq", data: EMPTY_DATA },
 ];
 
-// ─── CMS Page ─────────────────────────────────────────────────────────────────
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CmsPage() {
-  const router                  = useRouter();
-  const [pages, setPages]       = useState<CmsPageEntry[]>(INITIAL_PAGES);
+  const router = useRouter();
+  const [pages, setPages] = useState<CmsPageEntry[]>(INITIAL_PAGES);
   const [activeId, setActiveId] = useState("home");
-  const [saved, setSaved]       = useState(false);
-  const [fullWidth, setFullWidth] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  // Load drafts from localStorage after mount
   useEffect(() => {
     setPages((prev) =>
       prev.map((p) => ({ ...p, data: loadDraft(p.id) ?? p.data }))
@@ -208,7 +346,6 @@ export default function CmsPage() {
 
   const handleChange = (data: Data) => {
     setPages((prev) => prev.map((p) => (p.id === activeId ? { ...p, data } : p)));
-    saveDraft(activeId, data);
   };
 
   const handlePublish = (data: Data) => {
@@ -218,23 +355,13 @@ export default function CmsPage() {
 
   const handleSave = () => {
     const page = pages.find((p) => p.id === activeId) ?? pages[0];
-    const payload = {
-      pageId: page.id,
-      slug:   page.slug,
-      label:  page.label,
-      data:   page.data,
-    };
-    console.log("[CMS] Save payload →", payload);
-    saveDraft(activeId, page.data);
+    savePublished(activeId, page.data);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50"
-      style={PUCK_ORANGE_VARS}
-    >
+    <div className="fixed inset-0 z-50" style={PUCK_ORANGE_VARS}>
       <Puck
         key={activeId}
         config={puckConfig}
@@ -246,106 +373,16 @@ export default function CmsPage() {
         iframe={{ enabled: false }}
         overrides={{
           header: () => (
-            <div className="flex h-14 items-center justify-between border-b border-gray-100 bg-white px-6">
-              {/* Left — back button + brand + page tabs */}
-              <div className="flex items-center gap-5 min-w-0">
-                <button
-                  onClick={() => router.push("/campaign/institutions")}
-                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[#A1A1A1] transition-colors hover:bg-gray-100 hover:text-[#3C3C3B]"
-                >
-                  <ArrowLeft className="h-3.5 w-3.5" />
-                  Dashboard
-                </button>
-
-                <div className="h-4 w-px bg-gray-200" />
-
-                <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-[#EC8900]" />
-                  <span className="text-sm font-bold text-[#161616]">Site CMS</span>
-                </div>
-
-                <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-1">
-                  {pages.map((page) => (
-                    <button
-                      key={page.id}
-                      onClick={() => setActiveId(page.id)}
-                      className={cn(
-                        "rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors",
-                        activeId === page.id
-                          ? "bg-white text-[#EC8900] shadow-sm"
-                          : "text-[#A1A1A1] hover:text-gray-600"
-                      )}
-                    >
-                      {page.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Center — canvas width toggle */}
-              <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-1 shrink-0">
-                <button
-                  onClick={() => setFullWidth(false)}
-                  title="Container width (max 1280px)"
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
-                    !fullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
-                  )}
-                >
-                  <Minimize2 className="h-3 w-3" />
-                  Container
-                </button>
-                <button
-                  onClick={() => setFullWidth(true)}
-                  title="Full screen width"
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
-                    fullWidth ? "bg-white shadow-sm text-[#EC8900]" : "text-[#A1A1A1] hover:text-gray-600"
-                  )}
-                >
-                  <Maximize2 className="h-3 w-3" />
-                  Full Width
-                </button>
-              </div>
-
-              {/* Right — Save + Preview */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleSave}
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
-                    saved
-                      ? "bg-green-50 border border-green-200 text-green-700"
-                      : "bg-[#EC8900] text-white hover:bg-[#D97B00]"
-                  )}
-                >
-                  <Save className="h-3.5 w-3.5" />
-                  {saved ? "Saved!" : "Save Changes"}
-                </button>
-                <button
-                  onClick={() => window.open(`/preview/${activeId}`, "_blank")}
-                  className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:border-gray-300"
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                  Preview
-                </button>
-              </div>
-            </div>
+            <CmsHeader
+              pages={pages}
+              activeId={activeId}
+              setActiveId={setActiveId}
+              handleSave={handleSave}
+              saved={saved}
+              router={router}
+            />
           ),
           drawer: () => <CustomDrawer />,
-          preview: ({ children }) => (
-            <div
-              style={{
-                maxWidth:   fullWidth ? "none" : "1280px",
-                marginLeft:  "auto",
-                marginRight: "auto",
-                width:       "100%",
-                transition:  "max-width 0.3s ease",
-              }}
-            >
-              {children}
-            </div>
-          ),
         }}
       />
     </div>

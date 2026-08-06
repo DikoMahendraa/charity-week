@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Search, Plus, MoreHorizontal, UserPlus, Mail } from "lucide-react";
-import { Input }  from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge }  from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -18,44 +18,44 @@ import { ROLE_LABELS, type Role } from "@/lib/auth";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type UserStatus = "active" | "pending" | "suspended";
-type FilterKey  = "all" | UserStatus;
+type FilterKey = "all" | UserStatus;
 
 interface User {
-  id:         string;
+  id: string;
   joinedDate: string;
-  name:       string;
-  email:      string;
-  initials:   string;
+  name: string;
+  email: string;
+  initials: string;
   avatarColor: string;
-  role:       Role;
-  status:     UserStatus;
+  role: Role;
+  status: UserStatus;
   lastActive: string;
 }
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
 const USERS: User[] = [
-  { id: "USR-001", joinedDate: "Mon. 1 Jan.",  name: "Diko Mahendra",     email: "diko@amanahfy.com",     initials: "DM", avatarColor: "bg-orange-500", role: "super_admin", status: "active",    lastActive: "Today"       },
-  { id: "USR-002", joinedDate: "Tue. 14 Feb.", name: "Adil Rahman",       email: "adil@amanahfy.com",     initials: "AR", avatarColor: "bg-blue-500",   role: "admin",       status: "active",    lastActive: "2 hours ago" },
-  { id: "USR-003", joinedDate: "Wed. 8 Mar.",  name: "Aissha Fatmawati",  email: "aissha@gmail.com",      initials: "AF", avatarColor: "bg-purple-500", role: "fundraiser",  status: "active",    lastActive: "Yesterday"   },
-  { id: "USR-004", joinedDate: "Thu. 6 Apr.",  name: "Bilal Yusuf",       email: "bilal@iruk.org",        initials: "BY", avatarColor: "bg-teal-500",   role: "admin",       status: "active",    lastActive: "3 days ago"  },
-  { id: "USR-005", joinedDate: "Fri. 12 May",  name: "Fatima Noor",       email: "fatima@iruk.org",       initials: "FN", avatarColor: "bg-pink-500",   role: "fundraiser",  status: "active",    lastActive: "1 week ago"  },
-  { id: "USR-006", joinedDate: "Sat. 3 Jun.",  name: "Hassan Malik",      email: "hassan@iruk.org",       initials: "HM", avatarColor: "bg-green-600",  role: "fundraiser",  status: "pending",   lastActive: "—"           },
-  { id: "USR-007", joinedDate: "Sun. 9 Jul.",  name: "Imaan Hussain",     email: "imaan@charity.org",     initials: "IH", avatarColor: "bg-indigo-500", role: "admin",       status: "pending",   lastActive: "—"           },
-  { id: "USR-008", joinedDate: "Mon. 7 Aug.",  name: "Jasmine Kaur",      email: "jasmine@charity.org",   initials: "JK", avatarColor: "bg-rose-500",   role: "fundraiser",  status: "pending",   lastActive: "—"           },
-  { id: "USR-009", joinedDate: "Tue. 5 Sept.", name: "Khalid Omar",       email: "khalid@gmail.com",      initials: "KO", avatarColor: "bg-amber-600",  role: "fundraiser",  status: "suspended", lastActive: "2 weeks ago" },
-  { id: "USR-010", joinedDate: "Wed. 11 Oct.", name: "Layla Abdulaziz",   email: "layla@amanahfy.com",    initials: "LA", avatarColor: "bg-cyan-600",   role: "admin",       status: "suspended", lastActive: "1 month ago" },
-  { id: "USR-011", joinedDate: "Thu. 2 Nov.",  name: "Mustafa Ibrahim",   email: "mustafa@iruk.org",      initials: "MI", avatarColor: "bg-lime-600",   role: "fundraiser",  status: "active",    lastActive: "4 days ago"  },
-  { id: "USR-012", joinedDate: "Fri. 8 Dec.",  name: "Nadia Rashid",      email: "nadia@iruk.org",        initials: "NR", avatarColor: "bg-fuchsia-500",role: "fundraiser",  status: "active",    lastActive: "6 hours ago" },
+  { id: "USR-001", joinedDate: "Mon. 1 Jan.", name: "Diko Mahendra", email: "diko@amanahfy.com", initials: "DM", avatarColor: "bg-orange-500", role: "super_admin", status: "active", lastActive: "Today" },
+  { id: "USR-002", joinedDate: "Tue. 14 Feb.", name: "Adil Rahman", email: "adil@amanahfy.com", initials: "AR", avatarColor: "bg-blue-500", role: "admin", status: "active", lastActive: "2 hours ago" },
+  { id: "USR-003", joinedDate: "Wed. 8 Mar.", name: "Aissha Fatmawati", email: "aissha@gmail.com", initials: "AF", avatarColor: "bg-purple-500", role: "fundraiser", status: "active", lastActive: "Yesterday" },
+  { id: "USR-004", joinedDate: "Thu. 6 Apr.", name: "Bilal Yusuf", email: "bilal@iruk.org", initials: "BY", avatarColor: "bg-teal-500", role: "admin", status: "active", lastActive: "3 days ago" },
+  { id: "USR-005", joinedDate: "Fri. 12 May", name: "Fatima Noor", email: "fatima@iruk.org", initials: "FN", avatarColor: "bg-pink-500", role: "fundraiser", status: "active", lastActive: "1 week ago" },
+  { id: "USR-006", joinedDate: "Sat. 3 Jun.", name: "Hassan Malik", email: "hassan@iruk.org", initials: "HM", avatarColor: "bg-green-600", role: "fundraiser", status: "pending", lastActive: "" },
+  { id: "USR-007", joinedDate: "Sun. 9 Jul.", name: "Imaan Hussain", email: "imaan@charity.org", initials: "IH", avatarColor: "bg-indigo-500", role: "admin", status: "pending", lastActive: "" },
+  { id: "USR-008", joinedDate: "Mon. 7 Aug.", name: "Jasmine Kaur", email: "jasmine@charity.org", initials: "JK", avatarColor: "bg-rose-500", role: "fundraiser", status: "pending", lastActive: "" },
+  { id: "USR-009", joinedDate: "Tue. 5 Sept.", name: "Khalid Omar", email: "khalid@gmail.com", initials: "KO", avatarColor: "bg-amber-600", role: "fundraiser", status: "suspended", lastActive: "2 weeks ago" },
+  { id: "USR-010", joinedDate: "Wed. 11 Oct.", name: "Layla Abdulaziz", email: "layla@amanahfy.com", initials: "LA", avatarColor: "bg-cyan-600", role: "admin", status: "suspended", lastActive: "1 month ago" },
+  { id: "USR-011", joinedDate: "Thu. 2 Nov.", name: "Mustafa Ibrahim", email: "mustafa@iruk.org", initials: "MI", avatarColor: "bg-lime-600", role: "fundraiser", status: "active", lastActive: "4 days ago" },
+  { id: "USR-012", joinedDate: "Fri. 8 Dec.", name: "Nadia Rashid", email: "nadia@iruk.org", initials: "NR", avatarColor: "bg-fuchsia-500", role: "fundraiser", status: "active", lastActive: "6 hours ago" },
 ];
 
 // ─── Filters ──────────────────────────────────────────────────────────────────
 
 const filters: { key: FilterKey; label: string }[] = [
-  { key: "all",       label: "All users"  },
-  { key: "active",    label: "Active"     },
-  { key: "pending",   label: "Pending"    },
-  { key: "suspended", label: "Suspended"  },
+  { key: "all", label: "All users" },
+  { key: "active", label: "Active" },
+  { key: "pending", label: "Pending" },
+  { key: "suspended", label: "Suspended" },
 ];
 
 function countByStatus(status: UserStatus) {
@@ -63,30 +63,30 @@ function countByStatus(status: UserStatus) {
 }
 
 const statCounts: Record<FilterKey, number | string> = {
-  all:       USERS.length,
-  active:    countByStatus("active"),
-  pending:   countByStatus("pending"),
+  all: USERS.length,
+  active: countByStatus("active"),
+  pending: countByStatus("pending"),
   suspended: countByStatus("suspended"),
 };
 
 // ─── Badge + role helpers ─────────────────────────────────────────────────────
 
 const statusBadge: Record<UserStatus, { variant: "live" | "invited" | "exit"; label: string }> = {
-  active:    { variant: "live",    label: "Active"    },
-  pending:   { variant: "invited", label: "Pending"   },
-  suspended: { variant: "exit",    label: "Suspended" },
+  active: { variant: "live", label: "Active" },
+  pending: { variant: "invited", label: "Pending" },
+  suspended: { variant: "exit", label: "Suspended" },
 };
 
 const statusDot: Record<UserStatus, string> = {
-  active:    "bg-[#037847]",
-  pending:   "bg-gray-400",
+  active: "bg-[#037847]",
+  pending: "bg-gray-400",
   suspended: "bg-red-500",
 };
 
 const rolePillColor: Record<Role, string> = {
   super_admin: "bg-orange-50  text-orange-700  border-orange-200",
-  admin:       "bg-blue-50    text-blue-700    border-blue-200",
-  fundraiser:  "bg-purple-50  text-purple-700  border-purple-200",
+  admin: "bg-blue-50    text-blue-700    border-blue-200",
+  fundraiser: "bg-purple-50  text-purple-700  border-purple-200",
 };
 
 // ─── Avatar ───────────────────────────────────────────────────────────────────
@@ -103,8 +103,8 @@ function UserAvatar({ initials, color }: { initials: string; color: string }) {
 
 function InviteModal() {
   const [email, setEmail] = useState("");
-  const [role,  setRole]  = useState<Role>("fundraiser");
-  const [name,  setName]  = useState("");
+  const [role, setRole] = useState<Role>("fundraiser");
+  const [name, setName] = useState("");
 
   const handleSend = () => {
     console.log("[Users] Invite payload →", { name, email, role });
@@ -129,7 +129,7 @@ function InviteModal() {
             <UserPlus className="h-5 w-5 text-[#EC8900]" />
           </div>
           <DialogTitle className="text-base font-bold text-[#161616]">Invite a new user</DialogTitle>
-          <p className="text-xs text-[#475467]">They'll receive an email to set up their account.</p>
+          <p className="text-xs text-[#475467]">{`They'll`} receive an email to set up their account.</p>
         </DialogHeader>
 
         <div className="flex flex-col gap-4 mt-2">
@@ -255,15 +255,15 @@ function RowActions({ user }: { user: User }) {
 
 export default function UsersPage() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
-  const [searchQuery,  setSearchQuery]  = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = USERS.filter((u) => {
     const matchesFilter = activeFilter === "all" || u.status === activeFilter;
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
       !q ||
-      u.id.toLowerCase().includes(q)    ||
-      u.name.toLowerCase().includes(q)  ||
+      u.id.toLowerCase().includes(q) ||
+      u.name.toLowerCase().includes(q) ||
       u.email.toLowerCase().includes(q) ||
       ROLE_LABELS[u.role].toLowerCase().includes(q);
     return matchesFilter && matchesSearch;

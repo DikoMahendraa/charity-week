@@ -1,4 +1,4 @@
-# IRUK Charity Week — CMS Dashboard
+# IRUK Charity Week  CMS Dashboard
 
 Internal content management system for **IRUK Charity Week**, used to manage fundraising campaigns, donor reports, payments, and fundraising pages.
 
@@ -12,7 +12,7 @@ Internal content management system for **IRUK Charity Week**, used to manage fun
 | Language | TypeScript | ^5 |
 | UI Library | React | 19.2.4 |
 | Styling | Tailwind CSS v4 | ^4 |
-| Component Library | shadcn/ui (Base UI) | — |
+| Component Library | shadcn/ui (Base UI) |  |
 | HTTP Client | Axios | ^1 |
 | Server State | TanStack Query (React Query) | ^5 |
 | Client State | Zustand | ^5 |
@@ -30,12 +30,12 @@ Internal content management system for **IRUK Charity Week**, used to manage fun
 iruk-dashboard/
 │
 ├── app/                          # Next.js App Router
-│   ├── (auth)/                   # Auth route group — no sidebar, no guard
+│   ├── (auth)/                   # Auth route group  no sidebar, no guard
 │   │   ├── layout.tsx            # Centered full-screen layout
-│   │   ├── login/page.tsx        # Login — role selector + email/password
-│   │   └── register/page.tsx     # Register — form + password strength meter
+│   │   ├── login/page.tsx        # Login  role selector + email/password
+│   │   └── register/page.tsx     # Register  form + password strength meter
 │   │
-│   ├── (dashboard)/              # Protected route group — sidebar + guard
+│   ├── (dashboard)/              # Protected route group  sidebar + guard
 │   │   ├── layout.tsx            # AuthProvider + DashboardGuard + Sidebar shell
 │   │   ├── campaign/
 │   │   │   ├── institutions/     # Institution list + add dialog
@@ -43,15 +43,15 @@ iruk-dashboard/
 │   │   │   └── pages/            # Fundraising page list
 │   │   │       └── [id]/         # Page detail + draggable campaign table
 │   │   ├── report/
-│   │   │   ├── donors/           # Donor list — tabs, filters, tooltip truncation
-│   │   │   │   └── [id]/         # Donor detail — sticky nav + section search
-│   │   │   └── payments/         # Payment list — stat cards + tab filters
-│   │   │       └── [id]/         # Payment detail — 15-section sticky nav
+│   │   │   ├── donors/           # Donor list  tabs, filters, tooltip truncation
+│   │   │   │   └── [id]/         # Donor detail  sticky nav + section search
+│   │   │   └── payments/         # Payment list  stat cards + tab filters
+│   │   │       └── [id]/         # Payment detail  15-section sticky nav
 │   │   ├── site/cms/             # CMS placeholder
 │   │   └── admin/users/          # Admin users placeholder
 │   │
 │   ├── unauthorized/page.tsx     # Shown on forbidden direct URL access
-│   ├── layout.tsx                # Root layout — QueryProvider + TooltipProvider
+│   ├── layout.tsx                # Root layout  QueryProvider + TooltipProvider
 │   └── page.tsx                  # Redirects → /campaign/institutions
 │
 ├── components/
@@ -77,20 +77,20 @@ iruk-dashboard/
 │   └── auth-context.tsx          # AuthProvider, useAuth(), can(), logout(), switchRole()
 │
 ├── stores/
-│   ├── auth.store.ts             # Zustand — persisted user + JWT token
-│   └── ui.store.ts               # Zustand — toasts, modals, sidebar collapse
+│   ├── auth.store.ts             # Zustand  persisted user + JWT token
+│   └── ui.store.ts               # Zustand  toasts, modals, sidebar collapse
 │
 ├── lib/
 │   ├── auth.ts                   # Role types, mock users, ROLE_LABELS
 │   ├── permissions.ts            # ROUTE_PERMISSIONS map, canAccess(), defaultRouteForRole()
-│   ├── utils.ts                  # cn() — clsx + tailwind-merge
+│   ├── utils.ts                  # cn()  clsx + tailwind-merge
 │   ├── api/
-│   │   ├── client.ts             # Axios instance — Bearer interceptor, typed api.*
+│   │   ├── client.ts             # Axios instance  Bearer interceptor, typed api.*
 │   │   └── endpoints.ts          # Every API URL in one place
 │   ├── query/
-│   │   ├── client.ts             # QueryClient config — staleTime, retry, gcTime
+│   │   ├── client.ts             # QueryClient config  staleTime, retry, gcTime
 │   │   └── keys.ts               # Query key factory per domain
-│   └── schemas/                  # Zod schemas — runtime validation + TypeScript types
+│   └── schemas/                  # Zod schemas  runtime validation + TypeScript types
 │       ├── auth.schema.ts
 │       ├── institution.schema.ts
 │       ├── challenge.schema.ts
@@ -116,8 +116,8 @@ iruk-dashboard/
 
 The app uses two Next.js **route groups** to split concerns without affecting URLs:
 
-- **`(auth)`** — public pages (login, register). No sidebar, no guard.
-- **`(dashboard)`** — all protected pages. Every child is wrapped with `AuthProvider`, `DashboardGuard`, and the `Sidebar`.
+- **`(auth)`**  public pages (login, register). No sidebar, no guard.
+- **`(dashboard)`**  all protected pages. Every child is wrapped with `AuthProvider`, `DashboardGuard`, and the `Sidebar`.
 
 ```
 RootLayout  (QueryProvider + TooltipProvider)
@@ -135,7 +135,7 @@ RootLayout  (QueryProvider + TooltipProvider)
 
 Auth is split into three layers, each with a distinct responsibility:
 
-#### 1. `contexts/auth-context.tsx` — React context
+#### 1. `contexts/auth-context.tsx`  React context
 
 Manages the active user object in React state. Exposes:
 
@@ -143,16 +143,16 @@ Manages the active user object in React state. Exposes:
 |---|---|
 | `user` | Current `AuthUser` object (or `null`) |
 | `can(pathname)` | Returns `true` if the user may visit that route |
-| `switchRole(role)` | Dev utility — swaps the mock user |
+| `switchRole(role)` | Dev utility  swaps the mock user |
 | `logout()` | Clears session and redirects to `/login` |
 
 On mount it reads the persisted role from `localStorage`. **To connect a real API**, replace the `useEffect` body with a session fetch (see [Connecting the Real API](#connecting-the-real-api)).
 
-#### 2. `stores/auth.store.ts` — Zustand (persisted)
+#### 2. `stores/auth.store.ts`  Zustand (persisted)
 
 Stores the JWT `token` and `user` across page refreshes via `localStorage`. The Axios client reads the token from here to attach `Authorization: Bearer` headers automatically.
 
-#### 3. `lib/permissions.ts` — pure permission map
+#### 3. `lib/permissions.ts`  pure permission map
 
 ```ts
 export const ROUTE_PERMISSIONS: Record<string, Role[]> = {
@@ -163,7 +163,7 @@ export const ROUTE_PERMISSIONS: Record<string, Role[]> = {
 };
 ```
 
-`canAccess(pathname, role)` is a **pure function** — no React dependency. It can be called from middleware, guards, or any utility. To change who can see a page, edit this file only.
+`canAccess(pathname, role)` is a **pure function**  no React dependency. It can be called from middleware, guards, or any utility. To change who can see a page, edit this file only.
 
 #### Role matrix
 
@@ -179,7 +179,7 @@ export const ROUTE_PERMISSIONS: Record<string, Role[]> = {
 
 ---
 
-### Data Fetching — TanStack Query + Axios
+### Data Fetching  TanStack Query + Axios
 
 All server state goes through TanStack Query. The pattern for every domain is:
 
@@ -220,7 +220,7 @@ api.delete<T>(url)         // DELETE
 
 ---
 
-### Forms — React Hook Form + Zod
+### Forms  React Hook Form + Zod
 
 Every form uses a **Zod schema** as the single source of truth for both TypeScript types and runtime validation:
 
@@ -245,16 +245,16 @@ form.handleSubmit((data) => mutate(data));
 
 ---
 
-### Client State — Zustand
+### Client State  Zustand
 
 Two lightweight stores cover all client-only state:
 
-**`stores/auth.store.ts`** — JWT token + user object, persisted to `localStorage`
+**`stores/auth.store.ts`**  JWT token + user object, persisted to `localStorage`
 
-**`stores/ui.store.ts`** — ephemeral UI state (toasts, modals, sidebar)
+**`stores/ui.store.ts`**  ephemeral UI state (toasts, modals, sidebar)
 
 ```ts
-// Fire a toast from anywhere — no React component needed
+// Fire a toast from anywhere  no React component needed
 import { toast } from "@/stores/ui.store";
 
 toast.success("Institution created!");
@@ -312,13 +312,29 @@ npm run start    # Serve production build
 npm run lint     # ESLint
 ```
 
+### Docker
+
+Build the production image:
+
+```bash
+docker build -t charity-week .
+```
+
+Run it locally on port 3000:
+
+```bash
+docker run --rm -p 3000:3000 charity-week
+```
+
+The image uses Next.js standalone output and runs as a non-root user.
+
 ---
 
 ## Connecting the Real API
 
 The codebase is structured so that swapping mock data for real API calls touches as few files as possible.
 
-### Step 1 — Login (`app/(auth)/login/page.tsx`)
+### Step 1  Login (`app/(auth)/login/page.tsx`)
 
 ```ts
 // Replace the mock block in onSubmit:
@@ -338,7 +354,7 @@ useAuthStore.getState().setUser(res.user);
 router.push(defaultRouteForRole(res.user.role));
 ```
 
-### Step 2 — Session restore (`contexts/auth-context.tsx`)
+### Step 2  Session restore (`contexts/auth-context.tsx`)
 
 ```ts
 // Replace the useEffect body:
@@ -359,7 +375,7 @@ try {
 }
 ```
 
-### Step 3 — Replace static data in a page
+### Step 3  Replace static data in a page
 
 ```ts
 // Before (static array)
@@ -370,7 +386,7 @@ const { data, isLoading, error } = usePayments({ status: activeFilter });
 const payments = data?.data ?? [];
 ```
 
-### Step 4 — Add a new route
+### Step 4  Add a new route
 
 1. Add the URL to `lib/api/endpoints.ts`
 2. Write a Zod schema in `lib/schemas/`
@@ -384,9 +400,9 @@ const payments = data?.data ?? [];
 
 | Convention | Rule |
 |---|---|
-| Query keys | Always use `keys.*` factory — never inline strings |
-| HTTP calls | Always use `api.*` helpers — never raw `fetch` or `axios` |
+| Query keys | Always use `keys.*` factory  never inline strings |
+| HTTP calls | Always use `api.*` helpers  never raw `fetch` or `axios` |
 | TypeScript types | Always derived from Zod with `z.infer<>` |
-| Toasts | Use `toast.*` from `stores/ui.store.ts` — works outside React |
-| Permissions | Only edit `lib/permissions.ts` — never hardcode role checks in components |
+| Toasts | Use `toast.*` from `stores/ui.store.ts`  works outside React |
+| Permissions | Only edit `lib/permissions.ts`  never hardcode role checks in components |
 | New domains | One file each in `schemas/`, `hooks/`, `endpoints.ts`, `keys.ts` |

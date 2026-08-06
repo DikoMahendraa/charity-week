@@ -50,17 +50,17 @@ const tabs: { key: DonorTab; label: string }[] = [
 ];
 
 const donors: Donor[] = [
-  { id: "1",  reportId: "D-12991",   date: "Friday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "Zakat — may this be a blessing for the orphans.",        giftAid: "yes",  page: "aisha-rahman", tags: ["#London", "#Universities"] },
-  { id: "2",  reportId: "D-12992",   date: "Saturday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "CW 10K — running for a great cause!",                   giftAid: "yes",  page: "aisha-rahman", tags: ["#Oxford", "#Universities"] },
-  { id: "3",  reportId: "D-12993",   date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "Very awesome initiative, keep it up.",                   giftAid: "no",   page: "aisha-rahman", tags: ["#Cambridge", "#Universities"] },
-  { id: "4",  reportId: "D-12995",   date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "The spirit of this campaign is truly inspiring.",        giftAid: "yes",  page: "aisha-rahman", tags: ["#Imperial", "#Universities"] },
-  { id: "5",  reportId: "D-12996",   date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "Networking for charity — love this concept.",            giftAid: "yes",  page: "aisha-rahman", tags: ["#UCL", "#Universities"] },
-  { id: "6",  reportId: "D-129917",  date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "The world needs more events like this, thank you.",      giftAid: "yes",  page: "aisha-rahman", tags: ["#King's College", "#Universities"] },
-  { id: "7",  reportId: "D-12997",   date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "I appreciate the effort the team has put into this.",    giftAid: "no",   page: "aisha-rahman", tags: ["#LSE", "#Universities"] },
-  { id: "8",  reportId: "D-12998",   date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "The venue and organisation were top-notch.",             giftAid: "no",   page: "aisha-rahman", tags: ["#Queen Mary", "#Universities"] },
-  { id: "9",  reportId: "D-1299343", date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "I enjoyed every moment of this charity week event.",     giftAid: "no",   page: "aisha-rahman", tags: ["#Royal Holloway", "#Universities"] },
-  { id: "10", reportId: "D-1299132", date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "Great food, great people, great cause — well done!",    giftAid: "yes",  page: "aisha-rahman", tags: ["#SOAS", "#Universities"] },
-  { id: "11", reportId: "D-1299452", date: "Sunday, 13 September 2026, 9:00 PM",  amount: "$25", donor: "Hamza K", comment: "Looking forward to supporting again next year.",         giftAid: "yes",  page: "aisha-rahman", tags: ["#City University", "#Universities"] },
+  { id: "1", reportId: "D-12991", date: "Friday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "Zakat  may this be a blessing for the orphans.", giftAid: "yes", page: "aisha-rahman", tags: ["#London", "#Universities"] },
+  { id: "2", reportId: "D-12992", date: "Saturday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "CW 10K  running for a great cause!", giftAid: "yes", page: "aisha-rahman", tags: ["#Oxford", "#Universities"] },
+  { id: "3", reportId: "D-12993", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "Very awesome initiative, keep it up.", giftAid: "no", page: "aisha-rahman", tags: ["#Cambridge", "#Universities"] },
+  { id: "4", reportId: "D-12995", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "The spirit of this campaign is truly inspiring.", giftAid: "yes", page: "aisha-rahman", tags: ["#Imperial", "#Universities"] },
+  { id: "5", reportId: "D-12996", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "Networking for charity  love this concept.", giftAid: "yes", page: "aisha-rahman", tags: ["#UCL", "#Universities"] },
+  { id: "6", reportId: "D-129917", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "The world needs more events like this, thank you.", giftAid: "yes", page: "aisha-rahman", tags: ["#King's College", "#Universities"] },
+  { id: "7", reportId: "D-12997", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "I appreciate the effort the team has put into this.", giftAid: "no", page: "aisha-rahman", tags: ["#LSE", "#Universities"] },
+  { id: "8", reportId: "D-12998", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "The venue and organisation were top-notch.", giftAid: "no", page: "aisha-rahman", tags: ["#Queen Mary", "#Universities"] },
+  { id: "9", reportId: "D-1299343", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "I enjoyed every moment of this charity week event.", giftAid: "no", page: "aisha-rahman", tags: ["#Royal Holloway", "#Universities"] },
+  { id: "10", reportId: "D-1299132", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "Great food, great people, great cause  well done!", giftAid: "yes", page: "aisha-rahman", tags: ["#SOAS", "#Universities"] },
+  { id: "11", reportId: "D-1299452", date: "Sunday, 13 September 2026, 9:00 PM", amount: "$25", donor: "Hamza K", comment: "Looking forward to supporting again next year.", giftAid: "yes", page: "aisha-rahman", tags: ["#City University", "#Universities"] },
 ];
 
 /** Renders text truncated to a fixed width; hovering reveals the full value in a tooltip. */
@@ -178,11 +178,11 @@ export default function DonorsPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <FilterSelect label="Date range"       options={["Last 7 days", "Last 30 days", "Last 90 days", "This year"]} />
-        <FilterSelect label="Region"           options={["London", "Manchester", "Birmingham", "Leeds", "Indonesia"]} />
+        <FilterSelect label="Date range" options={["Last 7 days", "Last 30 days", "Last 90 days", "This year"]} />
+        <FilterSelect label="Region" options={["London", "Manchester", "Birmingham", "Leeds", "Indonesia"]} />
         <FilterSelect label="Institution Type" options={["Schools", "University societies", "Masjids", "Organisations"]} />
-        <FilterSelect label="Institution"      options={["Newton Academy", "South London School", "Greenfield University"]} />
-        <FilterSelect label="Page Type"        options={["Individual", "Team", "Institution"]} />
+        <FilterSelect label="Institution" options={["Newton Academy", "South London School", "Greenfield University"]} />
+        <FilterSelect label="Page Type" options={["Individual", "Team", "Institution"]} />
       </div>
 
       <div className="rounded-lg border border-gray-100 bg-white overflow-hidden">

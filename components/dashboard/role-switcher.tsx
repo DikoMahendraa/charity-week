@@ -5,7 +5,7 @@ import { ROLE_LABELS, type Role } from "@/lib/auth";
 
 const ROLES: Role[] = ["super_admin", "admin", "fundraiser"];
 
-// Dev-only component — remove or guard behind process.env.NODE_ENV check
+// Dev-only component  remove or guard behind process.env.NODE_ENV check
 // before shipping to production.
 export function RoleSwitcher() {
   const { user, switchRole } = useAuth();
@@ -21,11 +21,10 @@ export function RoleSwitcher() {
           <button
             key={role}
             onClick={() => switchRole(role)}
-            className={`w-full text-left rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
-              user.role === role
-                ? "bg-[#FFF2DF] text-[#EC8900]"
-                : "text-[#A1A1A1] hover:bg-gray-50 hover:text-gray-700"
-            }`}
+            className={`w-full text-left rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${user.role === role
+              ? "bg-[#FFF2DF] text-[#EC8900]"
+              : "text-[#A1A1A1] hover:bg-gray-50 hover:text-gray-700"
+              }`}
           >
             {user.role === role && <span className="mr-1">✓</span>}
             {ROLE_LABELS[role]}

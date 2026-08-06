@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,8 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AddChallengeDialog } from "@/components/dashboard/add-challenge-dialog";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { EditChallengeDialog } from "@/components/dashboard/edit-challenge-dialog";
 
 type RegistrationStatus = "open" | "limited" | "full";
 
@@ -105,10 +105,12 @@ export default function ChallengesPage() {
                 className="border-b border-gray-50 hover:bg-gray-50"
               >
                 <TableCell className="pl-6 py-4">
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{challenge.name}</p>
+                  <Link href={`/campaign/challenges/${challenge.id}`} className="group">
+                    <p className="font-semibold text-gray-900 text-sm group-hover:text-[#EC8900] transition-colors">
+                      {challenge.name}
+                    </p>
                     <p className="text-xs text-gray-400 mt-0.5">{challenge.subtitle}</p>
-                  </div>
+                  </Link>
                 </TableCell>
                 <TableCell className="text-sm text-gray-600 whitespace-nowrap">{challenge.createdDate}</TableCell>
                 <TableCell className="text-sm text-gray-600">{challenge.createdBy}</TableCell>
@@ -119,13 +121,14 @@ export default function ChallengesPage() {
                   <RegistrationBadge challenge={challenge} />
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-[#EC8900] text-[#EC8900] hover:bg-orange-50 hover:border-orange-300 rounded-full px-4"
-                  >
-                    Edit
-                  </Button>
+                  <EditChallengeDialog
+                    challengeName={challenge.name}
+                    initialPrice={challenge.price.replace("$", "")}
+                    initialCap={String(challenge.cap)}
+                    triggerLabel="Edit"
+                    triggerSize="sm"
+                    triggerClassName="border-[#EC8900] text-[#EC8900] hover:bg-orange-50 hover:border-orange-300 rounded-full px-4"
+                  />
                 </TableCell>
               </TableRow>
             ))}

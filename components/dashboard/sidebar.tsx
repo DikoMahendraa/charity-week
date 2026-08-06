@@ -17,14 +17,14 @@ const navSections = [
     title: "CAMPAIGN",
     items: [
       { href: "/campaign/institutions", label: "Institutions", icon: LayoutGrid },
-      { href: "/campaign/challenges",   label: "Challenges",   icon: Zap        },
-      { href: "/campaign/pages",        label: "Pages",        icon: FileText   },
+      { href: "/campaign/challenges", label: "Challenges", icon: Zap },
+      { href: "/campaign/pages", label: "Pages", icon: FileText },
     ],
   },
   {
     title: "REPORT",
     items: [
-      { href: "/report/donors",   label: "Donors",   icon: Users      },
+      { href: "/report/donors", label: "Donors", icon: Users },
       { href: "/report/payments", label: "Payments", icon: CreditCard },
     ],
   },
@@ -44,7 +44,7 @@ const navSections = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router   = useRouter();
+  const router = useRouter();
   const { user, can, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -80,7 +80,7 @@ export function Sidebar() {
     >
       {/* ── Logo + toggle ───────────────────────────────────────────── */}
       <div className={cn("flex items-center", collapsed ? "flex-col gap-2" : "justify-between gap-2")}>
-        {/* Logo mark — always visible */}
+        {/* Logo mark  always visible */}
         <div className={cn("flex items-center gap-2.5 min-w-0", collapsed && "justify-center")}>
           <div className="h-9 w-9 shrink-0">
             <Image src="/assets/svg/iruk-logo.svg" alt="Charity Week" width={36} height={45} />
@@ -105,7 +105,7 @@ export function Sidebar() {
         >
           {collapsed
             ? <ChevronRight className="h-4 w-4" />
-            : <ChevronLeft  className="h-4 w-4" />
+            : <ChevronLeft className="h-4 w-4" />
           }
         </button>
       </div>
@@ -114,12 +114,12 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto mt-8 space-y-5">
         {visibleSections.map((section) => (
           <div key={section.title}>
-            {/* Section title — hidden when collapsed, replaced by a divider */}
+            {/* Section title  hidden when collapsed, replaced by a divider */}
             {collapsed
               ? <div className="mb-1.5 mx-1 h-px bg-gray-100" />
               : <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-wider text-[#A1A1A1]">
-                  {section.title}
-                </p>
+                {section.title}
+              </p>
             }
 
             <ul className="space-y-0.5">

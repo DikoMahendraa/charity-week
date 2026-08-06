@@ -1,5 +1,5 @@
 // Central registry of every API endpoint.
-// Swap in real paths here once the backend is deployed — nothing else changes.
+// Swap in real paths here once the backend is deployed  nothing else changes.
 
 export const ENDPOINTS = {
   // Auth

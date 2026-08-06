@@ -52,7 +52,7 @@ const emails: Email[] = [
   { id: "1", sent: "Oct 5, 2023, 8:52 AM", subject: "Thank you for being a recurring supporter!", opened: "--" },
   { id: "2", sent: "Oct 5, 2023, 8:52 AM", subject: "Your donation has been confirmed", opened: "--" },
   { id: "3", sent: "Oct 5, 2023, 8:52 AM", subject: "Thank you for being a recurring supporter!", opened: "--" },
-  { id: "4", sent: "Oct 5, 2023, 8:52 AM", subject: "Charity Week 2026 — save the date", opened: "--" },
+  { id: "4", sent: "Oct 5, 2023, 8:52 AM", subject: "Charity Week 2026  save the date", opened: "--" },
   { id: "5", sent: "Oct 5, 2023, 8:52 AM", subject: "Thank you for being a recurring supporter!", opened: "--" },
 ];
 
@@ -186,7 +186,7 @@ export default function DonorDetailPage() {
             <div className="divide-y divide-gray-50">
               {[
                 { label: "Name", value: "Mr Test" },
-                { label: "Tax", value: "—" },
+                { label: "Tax", value: "" },
                 { label: "Email", value: "mrtest@email.com" },
                 { label: "Address", value: "Street address number 82, London, Baker Street, United Kingdom" },
               ].map(({ label, value }) => (
@@ -200,6 +200,7 @@ export default function DonorDetailPage() {
         </section>
 
         {/* Donations */}
+        {/* eslint-disable-next-line react-hooks/refs */}
         <section ref={sectionRefs.donations} id="donations">
           <div className="rounded-xl border border-gray-100 bg-white p-6">
             <div className="flex items-center justify-between mb-5">
@@ -296,6 +297,7 @@ export default function DonorDetailPage() {
         </section>
 
         {/* Emails */}
+        {/* eslint-disable-next-line react-hooks/refs */}
         <section ref={sectionRefs.emails} id="emails">
           <div className="rounded-xl border border-gray-100 bg-white p-6">
             <div className="flex items-center justify-between mb-5">

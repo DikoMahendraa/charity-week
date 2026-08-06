@@ -120,7 +120,7 @@ export default function FundraisingPagesPage() {
           />
         </div>
 
-        {/* Status dropdown — right-aligned pill style */}
+        {/* Status dropdown  right-aligned pill style */}
         <Select value={statusFilter ?? "all"} onValueChange={(v) => setStatusFilter(v === "all" ? null : v)}>
           <SelectTrigger className="h-10 gap-1.5 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 w-auto">
             <span className="text-gray-400 font-normal">Status:</span>

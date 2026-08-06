@@ -38,7 +38,7 @@ export function useReorderCampaigns(pageId: string) {
   return useMutation({
     mutationFn: (data: ReorderCampaignsInput) =>
       api.patch<PageCampaign[]>(ENDPOINTS.pages.reorder(pageId), data),
-    // Optimistic invalidation — the list will refetch with the new order
+    // Optimistic invalidation  the list will refetch with the new order
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: keys.pages.campaigns(pageId) });
     },

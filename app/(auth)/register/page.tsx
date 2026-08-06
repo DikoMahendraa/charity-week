@@ -14,11 +14,11 @@ import { cn } from "@/lib/utils";
 
 const registerSchema = z
   .object({
-    fullName:        z.string().min(2, "Full name is required"),
-    email:           z.string().email("Enter a valid email address"),
-    password:        z.string().min(8, "Min 8 characters"),
+    fullName: z.string().min(2, "Full name is required"),
+    email: z.string().email("Enter a valid email address"),
+    password: z.string().min(8, "Min 8 characters"),
     confirmPassword: z.string(),
-    agreeToTerms:    z.boolean().refine((v) => v === true, {
+    agreeToTerms: z.boolean().refine((v) => v === true, {
       message: "You must agree to the terms",
     }),
   })
@@ -33,19 +33,19 @@ type RegisterInput = z.infer<typeof registerSchema>;
 
 function getStrength(password: string): number {
   let score = 0;
-  if (password.length >= 8)           score++;
-  if (/[A-Z]/.test(password))         score++;
-  if (/[0-9]/.test(password))         score++;
+  if (password.length >= 8) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
   return score;
 }
 
 const strengthMeta: Record<number, { label: string; color: string }> = {
-  0: { label: "",       color: "bg-gray-200"    },
-  1: { label: "Weak",   color: "bg-red-400"     },
-  2: { label: "Fair",   color: "bg-orange-400"  },
-  3: { label: "Good",   color: "bg-amber-400"   },
-  4: { label: "Strong", color: "bg-[#EC8900]"   },
+  0: { label: "", color: "bg-gray-200" },
+  1: { label: "Weak", color: "bg-red-400" },
+  2: { label: "Fair", color: "bg-orange-400" },
+  3: { label: "Good", color: "bg-amber-400" },
+  4: { label: "Strong", color: "bg-[#EC8900]" },
 };
 
 function PasswordStrengthBar({ password }: { password: string }) {
@@ -90,13 +90,13 @@ const CheckboxField = forwardRef<
         {...props}
         className={cn("peer absolute inset-0 h-5 w-5 cursor-pointer opacity-0", className)}
       />
-      {/* Visual box — reacts to the peer checkbox state */}
+      {/* Visual box  reacts to the peer checkbox state */}
       <span className="pointer-events-none flex h-5 w-5 items-center justify-center rounded border-2 border-gray-300 transition-colors peer-checked:border-[#EC8900] peer-checked:bg-[#EC8900]">
         <svg viewBox="0 0 12 12" fill="none" className="h-3 w-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity">
           <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
-    </span>
+    </span >
   );
 });
 
@@ -106,9 +106,9 @@ export default function RegisterPage() {
   const router = useRouter();
   const { switchRole } = useAuth();
 
-  const [showPassword, setShowPassword]               = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting]               = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,

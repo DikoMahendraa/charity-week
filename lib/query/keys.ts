@@ -1,6 +1,6 @@
 // Centralised query key factory.
 // Using factory functions avoids typos and makes cache invalidation
-// precise — e.g. invalidate all donor queries with queryClient.invalidateQueries(keys.donors.all())
+// precise  e.g. invalidate all donor queries with queryClient.invalidateQueries(keys.donors.all())
 
 export const keys = {
   institutions: {

@@ -22,7 +22,8 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ArrowLeft, ExternalLink, MoreVertical, GripVertical, Archive, TrendingUp } from "lucide-react";
+import { ArrowLeft, ExternalLink, MoreVertical, GripVertical, Archive, TrendingUp, ArchiveIcon } from "lucide-react";
+import { EditProfileDialog } from "@/components/dashboard/edit-profile-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -42,7 +43,7 @@ interface Campaign {
 }
 
 // raised/goal drive the progress bar automatically.
-// Replace with API data when ready — rank auto-updates after each drag.
+// Replace with API data when ready  rank auto-updates after each drag.
 const initialCampaigns: Campaign[] = [
   { id: "1", rank: 1, title: "Muslim Charity Run 2025", raised: 42500, goal: 50000, raisedFormatted: "$42,500", enabled: true },
   { id: "2", rank: 2, title: "Muslim Charity Run 2026", raised: 12092, goal: 50000, raisedFormatted: "$12,092", enabled: false },
@@ -159,7 +160,7 @@ function CampaignRow({ campaign: c, isDragging = false, onToggle }: RowProps) {
         </button>
       </TableCell>
 
-      {/* Rank — reflects current position */}
+      {/* Rank  reflects current position */}
       <TableCell className="text-sm font-medium text-gray-600">{c.rank}</TableCell>
 
       {/* Toggle */}
@@ -181,16 +182,20 @@ function CampaignRow({ campaign: c, isDragging = false, onToggle }: RowProps) {
       {/* Actions */}
       <TableCell>
         <div className="flex items-center gap-1.5">
-          <Button variant="outline" size="sm"
-            className="rounded-full px-4 text-xs border-[#EC8900] text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
-          >
-            View
-          </Button>
-          <Button variant="outline" size="sm"
-            className="rounded-full px-4 text-xs border-[#EC8900] text-gray-600 hover:border-[#EC8900] hover:text-[#EC8900]"
-          >
-            Edit
-          </Button>
+          <Link href={`/campaigns/${c.id}`}>
+            <Button variant="outline" size="sm"
+              className="rounded-full px-4 text-xs border-[#EC8900] text-[#EC8900] hover:border-[#EC8900] hover:text-[#EC8900]"
+            >
+              View
+            </Button>
+          </Link>
+          <Link href={`/campaign/campaigns/${c.id}/edit`}>
+            <Button variant="outline" size="sm"
+              className="rounded-full px-4 text-xs border-[#EC8900] text-[#EC8900] hover:border-[#EC8900] hover:text-[#EC8900]"
+            >
+              Edit
+            </Button>
+          </Link>
         </div>
       </TableCell>
 
@@ -271,16 +276,19 @@ export default function PageDetailPage() {
 
   return (
     <div className="space-y-5">
-      <Link
-        href="/campaign/pages"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-[#EC8900] transition-colors"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Pages
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link
+          href="/campaign/pages"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-[#EC8900] transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Pages
+        </Link>
+      </div>
 
       {/* ── Orange profile banner ── */}
       <div className="rounded-2xl bg-[#EC8900] px-6 py-5">
+
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-lg font-bold text-[#EC8900]">
@@ -299,12 +307,11 @@ export default function PageDetailPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="border-white bg-white text-[#EC8900] font-semibold hover:bg-orange-50 rounded-lg">
-              Edit Profile
-            </Button>
-            <button className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors">
-              <MoreVertical className="h-4 w-4" />
-            </button>
+            <EditProfileDialog
+              initialFirstName="Aissha"
+              initialLastName="Fatmawati"
+              initialEmail="aisshafatmawati@gmail.com"
+            />
           </div>
         </div>
       </div>
@@ -329,6 +336,16 @@ export default function PageDetailPage() {
             </div>
           }
         />
+      </div>
+
+      <div className="flex justify-end">
+        <Link
+          href="/campaign/pages/archive"
+          className="inline-flex bg-[#EC8900] text-white items-center gap-1.5 rounded-lg px-3 py-3 text-xs font-medium text-white transition-colors"
+        >
+          <ArchiveIcon className="h-3.5 w-3.5 text-white" />
+          View Archived
+        </Link>
       </div>
 
       {/* ── Sortable campaigns table ── */}

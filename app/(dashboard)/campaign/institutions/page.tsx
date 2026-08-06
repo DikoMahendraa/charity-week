@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Upload, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AddInstitutionDialog } from "@/components/dashboard/add-institution-dialog";
+import { EditInstitutionDialog } from "@/components/dashboard/edit-institution-dialog";
 
 type InstitutionStatus = "invited" | "live" | "exit" | "funded";
 
@@ -89,10 +91,12 @@ export default function InstitutionsPage() {
                 className="border-b border-gray-50 hover:bg-gray-50"
               >
                 <TableCell className="pl-6 py-4">
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{institution.name}</p>
+                  <Link href={`/campaign/institutions/${institution.id}`} className="group">
+                    <p className="font-semibold text-gray-900 text-sm group-hover:text-[#EC8900] transition-colors">
+                      {institution.name}
+                    </p>
                     <p className="text-xs text-gray-400 mt-0.5">{institution.subtitle}</p>
-                  </div>
+                  </Link>
                 </TableCell>
                 <TableCell className="text-sm text-gray-600">{institution.type}</TableCell>
                 <TableCell className="text-sm text-gray-600">{institution.region}</TableCell>
@@ -107,13 +111,14 @@ export default function InstitutionsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-[#EC8900] text-[#EC8900] hover:bg-orange-50 hover:border-orange-300 rounded-full px-4"
-                  >
-                    Edit
-                  </Button>
+                  <EditInstitutionDialog
+                    institutionName={institution.name}
+                    institutionType={institution.type}
+                    region={institution.region}
+                    triggerLabel="Edit"
+                    triggerSize="sm"
+                    triggerClassName="border-[#EC8900] text-[#EC8900] hover:bg-orange-50 hover:border-orange-300 rounded-full px-4"
+                  />
                 </TableCell>
               </TableRow>
             ))}
